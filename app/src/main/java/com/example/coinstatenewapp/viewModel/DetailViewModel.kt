@@ -20,17 +20,9 @@ class DetailViewModel(val app: Application) : AndroidViewModel(app) {
     private lateinit var dbRepository: DbRepositoryImpl
     var isFavorite = MutableLiveData<Boolean>()
 
-    var coins: MutableLiveData<List<Coin>> = MutableLiveData()
-
     fun createDBIfNeeded() {
         val coinDao = CoinDatabase.getInstance(MAIN).getCoinDao()
         dbRepository = DbRepositoryImpl(coinDao)
-    }
-
-    fun getDataFromDB() {
-        viewModelScope.launch(Dispatchers.IO) {
-            coins.postValue(dbRepository.getAllFavoriteCoins())
-        }
     }
 
     fun onCoinFavoriteClick(coin: Coin, onSuccess: () -> Unit = {}) {
