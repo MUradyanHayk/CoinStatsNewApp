@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.coinstatenewapp.model.Coin
 
-@Database(entities = [Coin::class], version = 5)
+@Database(entities = [Coin::class], version = 6)
 
 abstract class CoinDatabase : RoomDatabase() {
     abstract fun getCoinDao(): CoinsDao

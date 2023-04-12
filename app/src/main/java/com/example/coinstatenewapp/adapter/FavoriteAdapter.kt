@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.example.coinstatenewapp.databinding.ItemCoinBinding
 import com.example.coinstatenewapp.model.Coin
 import com.example.coinstatenewapp.utils.CoinViewHolder
+import com.example.coinstatenewapp.utils.PrefsManager
 import java.lang.ref.WeakReference
 
 class FavoriteAdapter(val activity: Activity) : RecyclerView.Adapter<CoinViewHolder>() {
@@ -32,6 +33,7 @@ class FavoriteAdapter(val activity: Activity) : RecyclerView.Adapter<CoinViewHol
             delegate?.get()?.onCoinItemClick(coinsList[position])
         }
         holder.binding.favoriteImageView.visibility = View.GONE
+        coinsList[position].isFavorite = PrefsManager.getFavorite(activity, coinsList[position].id)
 
         Glide.with(holder.binding.root.context)
             .load(coinsList[position].icon)

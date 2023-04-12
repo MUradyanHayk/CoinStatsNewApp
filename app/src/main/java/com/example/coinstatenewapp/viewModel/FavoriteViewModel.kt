@@ -6,16 +6,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.coinstatenewapp.data.database.CoinDatabase
 import com.example.coinstatenewapp.data.repository.DbRepositoryImpl
-import com.example.coinstatenewapp.data.repository.ServerRepositoryImpl
 import com.example.coinstatenewapp.model.Coin
-import com.example.coinstatenewapp.model.CoinsModel
 import com.example.coinstatenewapp.utils.ApplicationManager.MAIN
 import com.example.coinstatenewapp.utils.PrefsManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.Response
 
-class DetailViewModel(val app: Application) : AndroidViewModel(app) {
+class FavoriteViewModel(val app: Application) : AndroidViewModel(app) {
 
     private lateinit var dbRepository: DbRepositoryImpl
     var isFavorite = MutableLiveData<Boolean>()
@@ -38,15 +35,13 @@ class DetailViewModel(val app: Application) : AndroidViewModel(app) {
             if (!coin.isFavorite) {
                 dbRepository.insertCoin(coin) {
                     PrefsManager.putFavorite(MAIN, coin.id, !coin.isFavorite)
-                    this@DetailViewModel.isFavorite.postValue(!coin.isFavorite)
-                    coin.isFavorite = !coin.isFavorite
+                    this@FavoriteViewModel.isFavorite.postValue(!coin.isFavorite)
                     onSuccess()
                 }
             } else {
                 dbRepository.deleteCoin(coin) {
                     PrefsManager.putFavorite(MAIN, coin.id, !coin.isFavorite)
-                    this@DetailViewModel.isFavorite.postValue(!coin.isFavorite)
-                    coin.isFavorite = !coin.isFavorite
+                    this@FavoriteViewModel.isFavorite.postValue(!coin.isFavorite)
                     onSuccess()
                 }
             }

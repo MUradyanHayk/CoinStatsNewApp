@@ -15,14 +15,15 @@ import com.example.coinstatenewapp.adapter.FavoriteAdapter
 import com.example.coinstatenewapp.databinding.FragmentFavoriteBinding
 import com.example.coinstatenewapp.model.Coin
 import com.example.coinstatenewapp.viewModel.DetailViewModel
+import com.example.coinstatenewapp.viewModel.FavoriteViewModel
 import com.example.coinstatenewapp.viewModel.HomeViewModel
 import java.lang.ref.WeakReference
 
 class FavoriteFragment : Fragment(), CoinsAdapterDelegate {
     private lateinit var binding: FragmentFavoriteBinding
     private var adapter: FavoriteAdapter? = null
-    private val viewModel: DetailViewModel by lazy {
-        ViewModelProvider(this)[DetailViewModel::class.java]
+    private val viewModel: FavoriteViewModel by lazy {
+        ViewModelProvider(this)[FavoriteViewModel::class.java]
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -38,7 +39,6 @@ class FavoriteFragment : Fragment(), CoinsAdapterDelegate {
 
     private fun initialization() {
         viewModel.createDBIfNeeded()
-//        getDataFromDB()
         adapter = FavoriteAdapter(requireActivity())
         adapter?.delegate = WeakReference(this)
         binding.recyclerView.adapter = adapter
