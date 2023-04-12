@@ -37,6 +37,7 @@ class HomeFragment : Fragment(), CoinsAdapterDelegate {
     }
 
     private fun initialization() {
+        viewModel.createDB()
         adapter = CoinsAdapter()
         adapter?.delegate = WeakReference(this)
         binding.recyclerView.adapter = adapter
@@ -52,14 +53,14 @@ class HomeFragment : Fragment(), CoinsAdapterDelegate {
         binding.progressBar.visibility = View.GONE
     }
 
-    override fun onCoinItemClick(view:View, coin: Coin) {
+    override fun onCoinItemClick(view: View, coin: Coin) {
         val bundle = Bundle()
         bundle.putSerializable("currentCoin", coin)
         findNavController().navigate(R.id.action_viewPagerFragment_to_detailFragment, bundle)
     }
 
     companion object {
-        const val TAG ="HomeFragment"
+        const val TAG = "HomeFragment"
         fun getNewInstance() = HomeFragment()
     }
 }
