@@ -52,13 +52,14 @@ class HomeFragment : Fragment(), CoinsAdapterDelegate {
         binding.progressBar.visibility = View.GONE
     }
 
-    companion object {
-        fun getNewInstance() = HomeFragment()
-    }
-
     override fun onCoinItemClick(view:View, coin: Coin) {
         val bundle = Bundle()
         bundle.putSerializable("currentCoin", coin)
         findNavController().navigate(R.id.action_viewPagerFragment_to_detailFragment, bundle)
+    }
+
+    companion object {
+        const val TAG ="HomeFragment"
+        fun getNewInstance() = HomeFragment()
     }
 }
