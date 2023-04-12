@@ -4,9 +4,10 @@ import androidx.lifecycle.LiveData
 import com.example.coinstatenewapp.data.database.CoinsDao
 import com.example.coinstatenewapp.model.Coin
 
-class DbRepositoryImpl(val coinDao: CoinsDao) : IDbRepository {
-    override val allFavoriteCoins: LiveData<List<Coin>>
-        get() = coinDao.getAllFavoriteCoins()
+class DbRepositoryImpl(private val coinDao: CoinsDao) : IDbRepository {
+    override suspend fun getAllFavoriteCoins(): List<Coin> {
+        return coinDao.getAllFavoriteCoins()
+    }
 
     override suspend fun updateCoin(coin: Coin, onSuccess: () -> Unit) {
         coinDao.update(coin)

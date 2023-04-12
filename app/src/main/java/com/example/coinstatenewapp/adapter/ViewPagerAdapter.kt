@@ -7,15 +7,12 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.coinstatenewapp.screens.FavoriteFragment
 import com.example.coinstatenewapp.screens.HomeFragment
 
-class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fragmentManager, lifecycle) {
+class ViewPagerAdapter(val list: List<Fragment>, fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fragmentManager, lifecycle) {
     override fun getItemCount(): Int {
-        return 2
+        return list.size
     }
 
     override fun createFragment(position: Int): Fragment {
-        return when (position) {
-            0 -> HomeFragment.getNewInstance()
-            else -> FavoriteFragment.getNewInstance()
-        }
+        return list[position]
     }
 }

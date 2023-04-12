@@ -16,5 +16,5 @@ interface CoinsDao {
     @Update(onConflict = OnConflictStrategy.IGNORE)
     suspend fun update(coin: Coin)
     @Query("SELECT * FROM _coins")
-    fun getAllFavoriteCoins(): LiveData<List<Coin>>
+    fun getAllFavoriteCoins(): List<Coin>
 }

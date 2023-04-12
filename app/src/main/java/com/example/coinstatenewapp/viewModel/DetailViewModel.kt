@@ -11,26 +11,26 @@ import com.example.coinstatenewapp.model.Coin
 import com.example.coinstatenewapp.model.CoinsModel
 import com.example.coinstatenewapp.utils.ApplicationManager.MAIN
 import com.example.coinstatenewapp.utils.PrefsManager
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
-class HomeViewModel(val app: Application) : AndroidViewModel(app) {
+class DetailViewModel(val app: Application) : AndroidViewModel(app) {
 
-    private val serverRepository = ServerRepositoryImpl()
     private lateinit var dbRepository: DbRepositoryImpl
     var isFavorite = MutableLiveData<Boolean>()
 
-    var coins: MutableLiveData<Response<CoinsModel>> = MutableLiveData()
-
-    fun getCoinsFromServer() {
-        viewModelScope.launch {
-            coins.value = serverRepository.getAllCoinsFromServer()
-        }
-    }
+    var coins: MutableLiveData<List<Coin>> = MutableLiveData()
 
     fun createDBIfNeeded() {
         val coinDao = CoinDatabase.getInstance(MAIN).getCoinDao()
         dbRepository = DbRepositoryImpl(coinDao)
+    }
+
+    fun getDataFromDB() {
+        viewModelScope.launch(Dispatchers.IO) {
+            coins.postValue(dbRepository.getAllFavoriteCoins())
+        }
     }
 
     fun onCoinFavoriteClick(coin: Coin, onSuccess: () -> Unit = {}) {
@@ -38,13 +38,13 @@ class HomeViewModel(val app: Application) : AndroidViewModel(app) {
             if (!coin.isFavorite) {
                 dbRepository.insertCoin(coin) {
                     PrefsManager.putFavorite(MAIN, coin.id, !coin.isFavorite)
-                    this@HomeViewModel.isFavorite.postValue(!coin.isFavorite)
+                    this@DetailViewModel.isFavorite.postValue(!coin.isFavorite)
                     onSuccess()
                 }
             } else {
                 dbRepository.deleteCoin(coin) {
                     PrefsManager.putFavorite(MAIN, coin.id, !coin.isFavorite)
-                    this@HomeViewModel.isFavorite.postValue(!coin.isFavorite)
+                    this@DetailViewModel.isFavorite.postValue(!coin.isFavorite)
                     onSuccess()
                 }
             }

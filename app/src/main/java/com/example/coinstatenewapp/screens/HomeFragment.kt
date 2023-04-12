@@ -6,11 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavDirections
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.coinstatenewapp.MainActivity
 import com.example.coinstatenewapp.R
 import com.example.coinstatenewapp.adapter.CoinsAdapter
 import com.example.coinstatenewapp.adapter.CoinsAdapterDelegate
@@ -37,7 +34,7 @@ class HomeFragment : Fragment(), CoinsAdapterDelegate {
     }
 
     private fun initialization() {
-        viewModel.createDB()
+        viewModel.createDBIfNeeded()
         adapter = CoinsAdapter(requireActivity())
         adapter?.delegate = WeakReference(this)
         binding.recyclerView.adapter = adapter
