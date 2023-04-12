@@ -38,7 +38,7 @@ class HomeFragment : Fragment(), CoinsAdapterDelegate {
 
     private fun initialization() {
         viewModel.createDB()
-        adapter = CoinsAdapter()
+        adapter = CoinsAdapter(requireActivity())
         adapter?.delegate = WeakReference(this)
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -47,16 +47,24 @@ class HomeFragment : Fragment(), CoinsAdapterDelegate {
             list.body()?.let { adapter?.setList(it.coins) }
             hideProgressBar()
         }
+
+        viewModel.isFavorite.observe(viewLifecycleOwner) {
+            adapter?.notifyDataSetChanged()
+        }
     }
 
     private fun hideProgressBar() {
         binding.progressBar.visibility = View.GONE
     }
 
-    override fun onCoinItemClick(view: View, coin: Coin) {
+    override fun onCoinItemClick(coin: Coin) {
         val bundle = Bundle()
         bundle.putSerializable("currentCoin", coin)
         findNavController().navigate(R.id.action_viewPagerFragment_to_detailFragment, bundle)
+    }
+
+    override fun onCoinFavoriteItemClick(coin: Coin) {
+        viewModel.onCoinFavoriteClick(coin)
     }
 
     companion object {

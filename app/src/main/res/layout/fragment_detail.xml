@@ -10,8 +10,8 @@
         android:id="@+id/nameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Name"
         android:layout_margin="16dp"
+        android:text="Name"
         android:textSize="36dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,9 +22,20 @@
         android:id="@+id/logoImageView"
         android:layout_width="250dp"
         android:layout_height="250dp"
+        android:src="@drawable/bitcoin_square_svgrepo_com"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/nameTextView" />
+
+    <ImageView
+        android:id="@+id/favoriteImageView"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/ic_favorite"
+        app:layout_constraintEnd_toEndOf="@id/logoImageView"
+        app:layout_constraintTop_toBottomOf="@id/logoImageView"
+        app:layout_goneMarginBottom="10dp"
+        app:tint="@color/favorite_color" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

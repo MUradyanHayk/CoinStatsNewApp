@@ -1,23 +1,27 @@
 package com.example.coinstatenewapp.adapter
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.coinstatenewapp.R
 import com.example.coinstatenewapp.databinding.ItemCoinBinding
 import com.example.coinstatenewapp.model.Coin
 import com.example.coinstatenewapp.utils.CoinViewHolder
+import com.example.coinstatenewapp.utils.PrefsManager
 import java.lang.ref.WeakReference
 
 interface CoinsAdapterDelegate {
-    fun onCoinItemClick(view: View, coin:Coin)
+    fun onCoinItemClick(coin: Coin)
+    fun onCoinFavoriteItemClick(coin: Coin)
 }
 
-class CoinsAdapter : RecyclerView.Adapter<CoinViewHolder>() {
+class CoinsAdapter(val activity: Activity) : RecyclerView.Adapter<CoinViewHolder>() {
     private var coinsList = emptyList<Coin>()
-    var delegate:WeakReference<CoinsAdapterDelegate>? = null
+    var delegate: WeakReference<CoinsAdapterDelegate>? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinViewHolder {
         val binding = ItemCoinBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CoinViewHolder(binding)
@@ -32,7 +36,17 @@ class CoinsAdapter : RecyclerView.Adapter<CoinViewHolder>() {
         holder.binding.priceBtcTextView.text = "${coinsList[position].priceBtc} BTC"
 
         holder.binding.root.setOnClickListener {
-            delegate?.get()?.onCoinItemClick(holder.binding.root, coinsList[position])
+            delegate?.get()?.onCoinItemClick(coinsList[position])
+        }
+        holder.binding.favoriteImageView.setOnClickListener {
+            delegate?.get()?.onCoinFavoriteItemClick(coinsList[position])
+        }
+
+        coinsList[position].isFavorite = PrefsManager.getFavorite(activity, coinsList[position].id)
+        if (coinsList[position].isFavorite) {
+            holder.binding.favoriteImageView.setImageResource(R.drawable.ic_favorite)
+        } else {
+            holder.binding.favoriteImageView.setImageResource(R.drawable.ic_not_favorite)
         }
 
         Glide.with(holder.binding.root.context)

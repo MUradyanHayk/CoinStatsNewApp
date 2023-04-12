@@ -27,6 +27,11 @@ class DetailFragment : Fragment() {
         currentCoin = arguments?.getSerializable("currentCoin") as? Coin?
         val currentCoin = this.currentCoin ?: return
         binding.nameTextView.text = currentCoin.name
+        if (currentCoin.isFavorite) {
+            binding.favoriteImageView.setImageResource(R.drawable.ic_favorite)
+        } else {
+            binding.favoriteImageView.setImageResource(R.drawable.ic_not_favorite)
+        }
         Glide.with(view.context)
             .load(currentCoin.icon)
             .into(binding.logoImageView)

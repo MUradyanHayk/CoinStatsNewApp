@@ -2,7 +2,9 @@ package com.example.coinstatenewapp.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.Expose
 import java.util.ArrayList
 
 @Entity(tableName = "_coins")
@@ -46,4 +48,9 @@ data class Coin(
     val volume: Double,
     @ColumnInfo(name = "websiteUrl")
     val websiteUrl: String?
-) : java.io.Serializable
+) : java.io.Serializable {
+    @Expose
+    @Ignore
+    @Transient
+    var isFavorite: Boolean = false
+}
