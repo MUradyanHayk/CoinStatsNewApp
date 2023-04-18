@@ -60,7 +60,6 @@ class HomeFragment : Fragment(), CoinsAdapterDelegate {
             if (list != null) {
                 adapter?.submitData(lifecycle, list)
             }
-            hideProgressBar()
         }
 
 
@@ -69,9 +68,6 @@ class HomeFragment : Fragment(), CoinsAdapterDelegate {
         }
     }
 
-    private fun hideProgressBar() {
-        binding.progressBar.visibility = View.GONE
-    }
 
     override fun onCoinItemClick(coin: Coin) {
         val bundle = Bundle()
