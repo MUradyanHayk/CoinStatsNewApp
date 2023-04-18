@@ -1,10 +1,12 @@
 package com.example.coinstatenewapp.screens
 
+import android.net.ConnectivityManager
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -17,7 +19,9 @@ import com.example.coinstatenewapp.adapter.CoinsAdapterDelegate
 import com.example.coinstatenewapp.databinding.FragmentHomeBinding
 import com.example.coinstatenewapp.model.Coin
 import com.example.coinstatenewapp.paging.LoaderAdapter
+import com.example.coinstatenewapp.utils.NetManager
 import com.example.coinstatenewapp.viewModel.HomeViewModel
+import com.google.android.material.snackbar.Snackbar
 import java.lang.ref.WeakReference
 
 class HomeFragment : Fragment(), CoinsAdapterDelegate {
@@ -48,6 +52,11 @@ class HomeFragment : Fragment(), CoinsAdapterDelegate {
 
         adapter?.addLoadStateListener { combinedLoadStates ->
             binding.progressBar.isVisible = combinedLoadStates.refresh == LoadState.Loading
+
+            val refreshState = combinedLoadStates.refresh
+            if (refreshState is LoadState.Error) {
+                Snackbar.make(binding.root, refreshState.error.localizedMessage ?: "", Snackbar.LENGTH_SHORT).show()
+            }
         }
 //        viewModel.getCoinsFromServer()
 
@@ -56,6 +65,15 @@ class HomeFragment : Fragment(), CoinsAdapterDelegate {
 //            hideProgressBar()
 //        }
 
+        viewModel.isFavorite.observe(viewLifecycleOwner) {
+            adapter?.notifyDataSetChanged()
+        }
+        if (!NetManager.hasInternetConnection(requireContext())) {
+//            Snackbar.make(binding.root, "Not Internet Connection", Snackbar.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Not Internet Connection", Toast.LENGTH_SHORT).show()
+            binding.progressBar.isVisible = false
+            return
+        }
         viewModel.getList().observe(viewLifecycleOwner) { list ->
             if (list != null) {
                 adapter?.submitData(lifecycle, list)
@@ -63,9 +81,6 @@ class HomeFragment : Fragment(), CoinsAdapterDelegate {
         }
 
 
-        viewModel.isFavorite.observe(viewLifecycleOwner) {
-            adapter?.notifyDataSetChanged()
-        }
     }
 
 
