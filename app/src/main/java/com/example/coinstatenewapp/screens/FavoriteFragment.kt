@@ -39,8 +39,7 @@ class FavoriteFragment : Fragment(), CoinsAdapterDelegate {
 
     private fun initialization() {
         viewModel.createDBIfNeeded()
-        adapter = FavoriteAdapter(requireActivity())
-        adapter?.delegate = WeakReference(this)
+        adapter = FavoriteAdapter(requireActivity(), WeakReference(this))
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 

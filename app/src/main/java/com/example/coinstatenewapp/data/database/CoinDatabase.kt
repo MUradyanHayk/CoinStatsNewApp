@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.coinstatenewapp.model.Coin
 
-@Database(entities = [Coin::class], version = 6)
+@Database(entities = [Coin::class], version = 9)
 
 abstract class CoinDatabase : RoomDatabase() {
     abstract fun getCoinDao(): CoinsDao
@@ -17,7 +17,9 @@ abstract class CoinDatabase : RoomDatabase() {
         @Synchronized
         fun getInstance(ctx: Context): CoinDatabase {
             if (instance == null) {
-                instance = Room.databaseBuilder(ctx.applicationContext, CoinDatabase::class.java, "note_database").build()
+                instance = Room.databaseBuilder(ctx.applicationContext, CoinDatabase::class.java, "note_database")
+                    .fallbackToDestructiveMigration()
+                    .build()
             }
             return instance!!
         }

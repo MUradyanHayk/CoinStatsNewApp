@@ -12,8 +12,8 @@ data class Coin(
     @ColumnInfo(name = "id")
     @PrimaryKey
     val id: String,
-    @ColumnInfo(name = "availableSupply")
-    val availableSupply: Long,
+//    @ColumnInfo(name = "availableSupply")
+//    val availableSupply: Long,
     @ColumnInfo(name = "contractAddress")
     val contractAddress: String?,
     @ColumnInfo(name = "decimals")
@@ -40,8 +40,8 @@ data class Coin(
     val rank: Int,
     @ColumnInfo(name = "symbol")
     val symbol: String?,
-    @ColumnInfo(name = "totalSupply")
-    val totalSupply: Long,
+//    @ColumnInfo(name = "totalSupply")
+//    val totalSupply: Long,
     @ColumnInfo(name = "twitterUrl")
     val twitterUrl: String?,
     @ColumnInfo(name = "volume")

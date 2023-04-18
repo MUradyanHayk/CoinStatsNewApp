@@ -2,8 +2,11 @@ package com.example.coinstatenewapp.viewModel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.example.coinstatenewapp.data.database.CoinDatabase
 import com.example.coinstatenewapp.data.repository.DbRepositoryImpl
 import com.example.coinstatenewapp.data.repository.ServerRepositoryImpl
@@ -26,6 +29,10 @@ class HomeViewModel(val app: Application) : AndroidViewModel(app) {
         viewModelScope.launch {
             coins.value = serverRepository.getAllCoinsFromServer()
         }
+    }
+
+    fun getList(): LiveData<PagingData<Coin>> {
+        return serverRepository.getCoins().cachedIn(viewModelScope)
     }
 
     fun createDBIfNeeded() {

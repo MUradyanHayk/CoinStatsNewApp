@@ -5,14 +5,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
+import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coinstatenewapp.R
 import com.example.coinstatenewapp.adapter.CoinsAdapter
 import com.example.coinstatenewapp.adapter.CoinsAdapterDelegate
 import com.example.coinstatenewapp.databinding.FragmentHomeBinding
 import com.example.coinstatenewapp.model.Coin
+import com.example.coinstatenewapp.paging.LoaderAdapter
 import com.example.coinstatenewapp.viewModel.HomeViewModel
 import java.lang.ref.WeakReference
 
@@ -35,15 +39,30 @@ class HomeFragment : Fragment(), CoinsAdapterDelegate {
 
     private fun initialization() {
         viewModel.createDBIfNeeded()
-        adapter = CoinsAdapter(requireActivity())
-        adapter?.delegate = WeakReference(this)
-        binding.recyclerView.adapter = adapter
+        adapter = CoinsAdapter(requireActivity(), WeakReference(this))
+        binding.recyclerView.adapter = adapter?.withLoadStateHeaderAndFooter(
+            footer = LoaderAdapter(),
+            header = LoaderAdapter()
+        )
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        viewModel.getCoinsFromServer()
-        viewModel.coins.observe(viewLifecycleOwner) { list ->
-            list.body()?.let { adapter?.setList(it.coins) }
+
+        adapter?.addLoadStateListener { combinedLoadStates ->
+            binding.progressBar.isVisible = combinedLoadStates.refresh == LoadState.Loading
+        }
+//        viewModel.getCoinsFromServer()
+
+//        viewModel.coins.observe(viewLifecycleOwner) { list ->
+//            list.body()?.let { adapter?.setList(it.coins) }
+//            hideProgressBar()
+//        }
+
+        viewModel.getList().observe(viewLifecycleOwner) { list ->
+            if (list != null) {
+                adapter?.submitData(lifecycle, list)
+            }
             hideProgressBar()
         }
+
 
         viewModel.isFavorite.observe(viewLifecycleOwner) {
             adapter?.notifyDataSetChanged()
